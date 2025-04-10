@@ -18,6 +18,7 @@ import Usermodal from './Usermodal';
 const { Header, Sider, Content } = Layout;
 
 const Sidebar = () => {
+  const [value, setValue] = useState(false);
   const [collapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -76,7 +77,7 @@ const Sidebar = () => {
       <Layout>
       
         <Header style={{ padding: 0, background: colorBgContainer  }}>
-        <Usermodal/>
+        <Usermodal setValue={setValue}/>
           
           
           
@@ -94,7 +95,7 @@ const Sidebar = () => {
 
         
           {/* Render the content based on the selected menu item */}
-          {getSelectedKey() === '1' && <Users />}
+          {getSelectedKey() === '1' && <Users value={value}/>}
           {getSelectedKey() === '2' && <Notes />}
           {getSelectedKey() === '3' && <Uploads />}
         </Content>

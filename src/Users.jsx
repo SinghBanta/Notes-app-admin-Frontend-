@@ -4,7 +4,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 
-const Users=()=>{
+
+
+const Users=({value})=>{
 
 
   const columns = [
@@ -33,7 +35,6 @@ const Users=()=>{
       },
     ];
   
-  // const data = [
   //   {
   //     key: "1",
   //     name: "John Brown",
@@ -62,13 +63,17 @@ const Users=()=>{
 
   useEffect(()=>{
     const getAllData = async() =>{
-      const {data: response} = await axios.get('http://localhost:3000/api/admin/getalluser');
+      const {data: response} = await axios.get(import.meta.env.VITE_GET_AllADMIN);
+    
       setData(response.users)
+
     }
 
     getAllData();
     
-  }, [])
+    
+
+  }, [value])
 
   return <Table columns={columns} dataSource={data} />
 

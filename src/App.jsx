@@ -1,5 +1,7 @@
+// Duplicate import removed
 import './App.css'
 import Dashboard from './pages/Dashboard'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -7,6 +9,7 @@ function App() {
     <>
       
       <Dashboard/>
+      <ToastContainer/>
     </>
     
   )

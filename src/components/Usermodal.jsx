@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
+import { toast } from "react-toastify";
 import axios from 'axios'
-const Usermodal = () => {
+
+const Usermodal = ({ setValue }) => {
   const [modal2Open, setModal2Open] = useState(false);
   
 const [username, setUsername] = useState("");
 const [role, setRole] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 
 
 const handleInputChange = (e) => {
@@ -15,27 +19,42 @@ const handleInputChange = (e) => {
     } else if (name === "role") {
         setRole(value);
     }
+    else if (name === "email") {
+        setEmail(value);
+    } else if (name === "password") {
+        setPassword(value);
+    }
 };
 
 const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log({ username, role });
+    console.log({ username, role, email, password });
 
     try {
         // console.log("Environment variable USER_PATH:",);
         const response = await axios.post(import.meta.env.VITE_NEW_USER, {  
           username,
           role,
-
+          email,
+          password,
         });
+        await axios.post(import.meta.env.VITE_GET_SENDMAIL,{
+        username: username,
+        email: email,
+        password: password,
+
+        })
+        
         
         console.log('successfull:', response.data);
+        setValue((prev) => !prev);
+        toast.success("User added successfully!");
         
-      } catch {
-        console.log("Response is not up to date"); 
+      } catch (error) {
+        console.log("Response is not up to date", error.response.data); 
       } finally {
         setModal2Open(false);
-        window.location.reload();
+        // window.location.reload();
       }
 };
 
@@ -73,6 +92,37 @@ return (
                         onChange={handleInputChange}
                         className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
+
+                    <label
+                        htmlFor="email"
+                        className="mt-2 text-sm font-medium text-gray-700"
+                    >
+                        Email
+                    </label>
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        value={email}
+                        onChange={handleInputChange}
+                        className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+
+                    <label
+                        htmlFor="password"
+                        className="mt-2 text-sm font-medium text-gray-700"
+                    >
+                        Password
+                    </label>
+                    <input
+                        type="text"
+                        name="password"
+                        id="password"
+                        value={password}
+                        onChange={handleInputChange}
+                        className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+
                 </div>
                 <div className="flex flex-col">
                     <label
@@ -91,6 +141,7 @@ return (
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
                     </select>
+
                 </div>
                 <div className="flex justify-end space-x-2">
                     <Button
