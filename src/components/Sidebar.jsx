@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
-import Users from '../Users';
-import Notes from '../Notes';
-import Uploads from '../Uploads';
-import Usermodal from './Usermodal';
-
-
-
+} from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
+import Users from "../Users";
+import Notes from "../Notes";
+import Uploads from "../Uploads";
+import Usermodal from "./Usermodal";
 
 const { Header, Sider, Content } = Layout;
 
@@ -25,16 +22,28 @@ const Sidebar = () => {
   } = theme.useToken();
   const getSelectedKey = () => {
     const path = window.location.pathname;
-    if (path === '/') return '1';
-    if (path === '/notes') return '2';
-    if (path === '/uploads') return '3';
-    return '';
+    if (path === "/") return "1";
+    if (path === "/notes") return "2";
+    if (path === "/uploads") return "3";
+    return "";
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '64px' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "64px",
+          }}
+        >
           <img
             src="https://img.icons8.com/ios/452/brain.png"
             alt="logo"
@@ -44,60 +53,62 @@ const Sidebar = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={["1"]}
           onClick={({ key }) => {
-            if (key === '1') {
-              window.location.href = '/';
-            } else if (key === '2') {
-              window.location.href = '/notes';
-            } else if (key === '3') {
-              window.location.href = '/uploads';
+            if (key === "1") {
+              window.location.href = "/";
+            } else if (key === "2") {
+              window.location.href = "/notes";
+            } else if (key === "3") {
+              window.location.href = "/uploads";
             }
           }}
           selectedKeys={[getSelectedKey()]}
           items={[
             {
-              key: '1',
+              key: "1",
               icon: <UserOutlined />,
-              label: 'Users',
+              label: "Users",
             },
             {
-              key: '2',
+              key: "2",
               icon: <VideoCameraOutlined />,
-              label: 'Notes',
+              label: "Notes",
             },
             {
-              key: '3',
+              key: "3",
               icon: <UploadOutlined />,
-              label: 'Uploads',
+              label: "Uploads",
             },
           ]}
         />
       </Sider>
       <Layout>
-      
-        <Header style={{ padding: 0, background: colorBgContainer  }}>
-        <Usermodal setValue={setValue}/>
-          
-          
-          
-          
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          <div className="flex items-center gap-2 justify-end mt-4">
+            <Button
+              type="primary"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded"
+              onClick={handleLogout}
+            >
+              LOGOUT
+            </Button>
+            <Usermodal setValue={setValue} />
+          </div>
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
+            margin: "24px 16px",
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
-
-        
           {/* Render the content based on the selected menu item */}
-          {getSelectedKey() === '1' && <Users value={value}/>}
-          {getSelectedKey() === '2' && <Notes />}
-          {getSelectedKey() === '3' && <Uploads />}
+          {getSelectedKey() === "1" && <Users value={value} />}
+          {getSelectedKey() === "2" && <Notes />}
+          {getSelectedKey() === "3" && <Uploads />}
         </Content>
       </Layout>
     </Layout>

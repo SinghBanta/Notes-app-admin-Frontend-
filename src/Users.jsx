@@ -63,8 +63,14 @@ const Users=({value})=>{
 
   useEffect(()=>{
     const getAllData = async() =>{
-      const {data: response} = await axios.get(import.meta.env.VITE_GET_AllADMIN);
-    
+      const {data: response} = await axios.get(import.meta.env.VITE_GET_AllADMIN,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    console.log(response)
       setData(response.users)
 
     }

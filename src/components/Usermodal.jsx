@@ -7,7 +7,7 @@ const Usermodal = ({ setValue }) => {
   const [modal2Open, setModal2Open] = useState(false);
   
 const [username, setUsername] = useState("");
-const [role, setRole] = useState("");
+const [role, setRole] = useState("user");
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 
@@ -59,7 +59,7 @@ const handleSubmit = async(e) => {
 };
 
 return (
-    <div className="flex justify-end mt-4 mr-5">
+    <div className="flex justify-end  mr-5">
         <Button
             type="primary"
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"

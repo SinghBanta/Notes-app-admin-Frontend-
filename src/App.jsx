@@ -5,14 +5,18 @@ import { ToastContainer } from 'react-toastify'
 
 
 function App() {
-  return (
-    <>
-      
-      <Dashboard/>
-      <ToastContainer/>
-    </>
-    
-  )
+  if (localStorage.getItem("token") === null) {
+    window.location.href = "/login";
+  }
+  
+  if (localStorage.getItem('token')) {
+    return (
+      <>
+        <Dashboard/>
+        <ToastContainer/>
+      </>
+    )
+  }
 }
 
 export default App
