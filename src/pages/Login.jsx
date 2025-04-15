@@ -17,8 +17,8 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      console.log("Environment variable USER_PATH:", import.meta.env.VITE_LOGIN_PATH);
-      const response = await axios.post(import.meta.env.VITE_LOGIN_PATH, {  
+      // console.log("Environment variable USER_PATH:", import.meta.env.VITE_BASE_URL + '/api/admin/login');
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}api/admin/login`, {  
         email, 
         password 
       });

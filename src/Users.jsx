@@ -2,6 +2,9 @@
 import { Space, Table, Tag } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Editmodal from "./components/Editmodal";
+import Delete from "./components/Delete";
+
 
 
 
@@ -10,6 +13,7 @@ const Users=({value})=>{
 
 
   const columns = [
+    
       {
         title: "Name",
         dataIndex: "username",
@@ -26,10 +30,10 @@ const Users=({value})=>{
       {
         title: "Action",
         key: "action",
-        render: () => (
+        render: (record) => (
           <Space size="middle">
-            <a>Edit</a>
-            <a>Delete</a>
+            <Editmodal name={record.username} role={record.role} id={record._id} />
+            <Delete id={record._id} />
           </Space>
         ),
       },
@@ -63,7 +67,7 @@ const Users=({value})=>{
 
   useEffect(()=>{
     const getAllData = async() =>{
-      const {data: response} = await axios.get(import.meta.env.VITE_GET_AllADMIN,
+      const {data: response} = await axios.get(`${import.meta.env.VITE_BASE_URL}api/admin/getalluser`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

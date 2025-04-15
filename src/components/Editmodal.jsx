@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import { Button, Modal, Spin } from "antd";
+import { Button, Modal } from "antd";
 import { toast } from "react-toastify";
 import axios from 'axios'
-import { LoadingOutlined } from '@ant-design/icons';
+// import { header } from "framer-motion/client";
 
-const Usermodal = ({ setValue }) => {
+const Editmodal = ({ setValue,name,role,id }) => {
   const [modal2Open, setModal2Open] = useState(false);
   
-const [username, setUsername] = useState("");
-const [role, setRole] = useState("user");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [loading,setLoading]=useState(false);
+const [username, setUsername] = useState(name);
+const [userRole, setUserRole] = useState(role);
+
 
 
 const handleInputChange = (e) => {
@@ -19,59 +17,42 @@ const handleInputChange = (e) => {
     if (name === "username") {
         setUsername(value);
     } else if (name === "role") {
-        setRole(value);
+        setUserRole(value);
     }
-    else if (name === "email") {
-        setEmail(value);
-    } else if (name === "password") {
-        setPassword(value);
-    }
+   
 };
 
 const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log({ username, role, email, password });
+    console.log({ username, userRole });
 
     try {
-        setLoading(true)
-        // console.log("Environment variable USER_PATH:",);
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}api/admin/newuser`, {  
-          username,
-          role,
-          email,
-          password,
-        },
-        {
-            headers: {  
-                'Content-Type': 'application/json',  
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+        
+        const response = await axios.patch(
+            `${import.meta.env.VITE_BASE_URL}api/admin/updateuser`,
+            { 
+                id: id, 
+                username,
+                role: userRole,
+            },
+            {
+                headers: {  
+                    'Content-Type': 'application/json',  
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                }
             }
-
-        }
-    );
-        await axios.post(`${import.meta.env.VITE_BASE_URL}api/admin/sendmail`,{
-        username: username,
-        email: email,
-        password: password,
-
-        })
+        );
         
         
         console.log('successfull:', response.data);
         setValue((prev) => !prev);
-        toast.success("User added successfully!");
-
-        setUsername("")
-        setEmail("")
-        setPassword("")
-        setRole("")
+        toast.success("User updated successfully!");
         
       } catch (error) {
         console.log("Response is not up to date", error.response.data); 
       } finally {
         setModal2Open(false);
-        setLoading(false)
-        // window.location.reload();
+        window.location.reload();
       }
 };
 
@@ -82,10 +63,10 @@ return (
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
             onClick={() => setModal2Open(true)}
         >
-            ADD USER
+            EDIT
         </Button>
         <Modal
-            title={<h2 className="text-lg font-bold text-gray-800">Add New User</h2>}
+            title={<h2 className="text-lg font-bold text-gray-800">Edit User</h2>}
             centered
             open={modal2Open}
             onOk={() => setModal2Open(false)}
@@ -110,36 +91,6 @@ return (
                         className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
 
-                    <label
-                        htmlFor="email"
-                        className="mt-2 text-sm font-medium text-gray-700"
-                    >
-                        Email
-                    </label>
-                    <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        value={email}
-                        onChange={handleInputChange}
-                        className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-
-                    <label
-                        htmlFor="password"
-                        className="mt-2 text-sm font-medium text-gray-700"
-                    >
-                        Password
-                    </label>
-                    <input
-                        type="text"
-                        name="password"
-                        id="password"
-                        value={password}
-                        onChange={handleInputChange}
-                        className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-
                 </div>
                 <div className="flex flex-col">
                     <label
@@ -151,7 +102,7 @@ return (
                     <select
                         name="role"
                         id="role"
-                        value={role}
+                        value={userRole}
                         onChange={handleInputChange}
                         className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
@@ -171,13 +122,9 @@ return (
                     <Button
                         type="primary"
                         htmlType="submit"
-                        disabled={loading ? true : false}
                         className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
                     >
-                        {loading ? <div className="flex items-center gap-1">
-                            <Spin indicator={<LoadingOutlined spin />} size="small" />
-                            <span>Submitting</span>
-                        </div> : 'Submit'}
+                        Submit
                     </Button>
                 </div>
             </form>
@@ -185,4 +132,4 @@ return (
     </div>
 );
 };
-export default Usermodal;
+export default Editmodal;
