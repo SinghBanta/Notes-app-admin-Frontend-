@@ -31,7 +31,7 @@ const Users=({value})=>{
         title: "Action",
         key: "action",
         render: (record) => (
-          <Space size="middle">
+          <Space size="small">
             <Editmodal name={record.username} role={record.role} id={record._id} />
             <Delete id={record._id} />
           </Space>
